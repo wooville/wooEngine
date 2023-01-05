@@ -1,6 +1,11 @@
 #include "Game.h"
 #include "../Logger/Logger.h"
 #include "../ECS/ECS.h"
+#include "../Systems/MovementSystem.h"
+#include "../Systems/RenderSystem.h"
+#include "../Components/TransformComponent.h"
+#include "../Components/RigidBodyComponent.h"
+#include "../Components/SpriteComponent.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glm/glm.hpp>
@@ -80,29 +85,39 @@ void Game::ProcessInput() {
 }
 
 void Game::Setup() {
-	//TODO
+	registry->AddSystem<MovementSystem>();
+	registry->AddSystem<RenderSystem>();
+
 	Entity tank = registry->CreateEntity();
 	Entity truck = registry->CreateEntity();
-	//tank.AddComponent<TransformComponent>();
-	//tank.AddComponent<BoxColliderComponent>();
-	//tank.AddComponent<SpriteComponent>("./assets/images/tank.png");
+
+	tank.AddComponent<TransformComponent>(glm::vec2(10.0, 30.0), glm::vec2(1.0, 1.0));
+	tank.AddComponent<RigidBodyComponent>(glm::vec2(40.0, 0.0));
+	tank.AddComponent<SpriteComponent>(10,10);
+
+	truck.AddComponent<TransformComponent>(glm::vec2(50.0, 100.0), glm::vec2(1.0, 1.0));
+	truck.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 50.0));
+	truck.AddComponent<SpriteComponent>(10, 50);
 }
 
 void Game::Update() {
-	//wait until current frame has passed into next frame to execute (framerate cap)
+	// wait until current frame has passed into next frame to execute (framerate cap)
 	int timeToWait = MILLISECS_PER_FRAME - (SDL_GetTicks() - millisecsPreviousFrame);
 	if (timeToWait > 0 && timeToWait <= MILLISECS_PER_FRAME) {
 		SDL_Delay(timeToWait);
 	}
 
-	//time since previous frame
+	// time since previous frame
 	double deltaTime = (SDL_GetTicks() - millisecsPreviousFrame) / 1000.0;
 
-	//current frame time
+	// current frame time
 	millisecsPreviousFrame = SDL_GetTicks();
 
-	//TODO
-	//MovementSystem.Update();
+	// update registry to process entities
+	registry->Update();
+
+	// invoke systems that need to update
+	registry->GetSystem<MovementSystem>().Update(deltaTime);
 	//CollisionSystem.Update();
 	//DamageSystem.Update();
 }
@@ -111,7 +126,8 @@ void Game::Render() {
 	SDL_SetRenderDrawColor(renderer, 21, 21, 21, 255);
 	SDL_RenderClear(renderer);
 
-	//TODO
+	// invoke systems that need to render
+	registry->GetSystem<RenderSystem>().Update(renderer);
 
 	SDL_RenderPresent(renderer);
 }
