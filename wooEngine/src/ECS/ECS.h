@@ -8,6 +8,7 @@
 #include <unordered_map>
 #include <typeindex>
 #include <set>
+#include <deque>
 #include <memory>
 
 const unsigned int MAX_COMPONENTS = 32;
@@ -58,7 +59,10 @@ public:
 	template <typename TComponent> bool HasComponent() const;
 	template <typename TComponent> TComponent& GetComponent() const;
 
-	//
+	void Kill();
+
+	// reference to entity's registry
+	// used to allow function calls (kill, component management) on entity object instead of directly from registry
 	class Registry* registry;
 };
 
@@ -81,6 +85,7 @@ public:
 	void AddEntityToSystem(Entity entity);
 	void RemoveEntityFromSystem(Entity entity);
 	std::vector<Entity> GetSystemEntities() const;
+	int GetNumEntities() const;
 	const Signature& GetComponentSignature() const;
 
 	// defines which kinds of components entities must have to be considered by system
@@ -168,6 +173,9 @@ private:
 	// index = system type id
 	std::unordered_map<std::type_index, std::shared_ptr<System>> systems;
 
+	// list of available entity ids previously removed
+	std::deque<int> freeIds;
+
 public:
 	Registry() {
 		Logger::Log("Registry constructor called.");
@@ -178,19 +186,24 @@ public:
 
 	void Update();
 
+	// entity management
 	Entity CreateEntity();
-	void AddEntityToSystems(Entity entity);
+	void KillEntity(Entity entity);
 	
-	//void KillEntity();
+	// component management
 	template <typename TComponent, typename ...TArgs> void AddComponent(Entity entity, TArgs&& ...args);
 	template <typename TComponent> void RemoveComponent(Entity entity);
 	template <typename TComponent> bool HasComponent(Entity entity) const;
 	template <typename TComponent> TComponent& GetComponent(Entity entity) const;
 
+	//system management
 	template <typename TSystem, typename ...TArgs> void AddSystem(TArgs&& ...args);
 	template <typename TSystem> void RemoveSystem();
 	template <typename TSystem> bool HasSystem() const;
 	template <typename TSystem> TSystem& GetSystem() const;
+
+	void AddEntityToSystems(Entity entity);
+	void RemoveEntityFromSystems(Entity entity);
 	
 };
 
