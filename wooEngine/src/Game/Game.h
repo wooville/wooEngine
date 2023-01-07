@@ -1,8 +1,8 @@
-#ifndef GAME_H
-#define GAME_H
+#pragma once
 
 #include "../ECS/ECS.h"
 #include "../AssetStore/AssetStore.h"
+#include "../EventBus/EventBus.h"
 #include <SDL.h>
 
 const int FPS = 60;
@@ -18,8 +18,7 @@ private:
 	
 	std::unique_ptr<Registry> registry;
 	std::unique_ptr<AssetStore> assetStore;
-	
-	void LoadTilemap(int rows, int cols, int tileSize, std::string mapfile);
+	std::unique_ptr<EventBus> eventBus;
 
 public:
 	Game();
@@ -37,5 +36,3 @@ public:
 	int windowWidth;
 	int windowHeight;
 };
-
-#endif

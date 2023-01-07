@@ -1,5 +1,4 @@
-#ifndef RENDERSYSTEM_H
-#define RENDERSYSTEM_H
+#pragma once
 
 #include "../ECS/ECS.h"
 #include "../Components/TransformComponent.h"
@@ -71,5 +70,3 @@ public:
 		}
 	}
 };
-
-#endif

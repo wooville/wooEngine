@@ -1,5 +1,4 @@
-#ifndef ASSETSTORE_H
-#define ASSETSTORE_H
+#pragma once
 
 #include <map>
 #include <string>
@@ -18,5 +17,3 @@ public:
 	void AddTexture(SDL_Renderer* renderer, const std::string& assetId, const std::string& filePath);
 	SDL_Texture* GetTexture(const std::string& assetId);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef RENDERCOLLIDERSYSTEM_H
-#define RENDERCOLLIDERSYSTEM_H
+#pragma once
 
 #include "../ECS/ECS.h"
 #include "../Components/BoxColliderComponent.h"
@@ -30,5 +29,3 @@ public:
 		
 	}
 };
-
-#endif

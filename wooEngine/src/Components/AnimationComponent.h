@@ -1,5 +1,4 @@
-#ifndef ANIMATIONCOMPONENT_H
-#define	ANIMATIONCOMPONENT_H
+#pragma once
 
 #include <SDL.h>
 
@@ -19,5 +18,3 @@ struct AnimationComponent {
 
 	}
 };
-
-#endif

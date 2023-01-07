@@ -1,5 +1,4 @@
-#ifndef BOXCOLLIDERCOMPONENT_H
-#define BOXCOLLIDERCOMPONENT_H
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -15,5 +14,3 @@ public:
 		this->offset = offset;
 	}
 };
-
-#endif

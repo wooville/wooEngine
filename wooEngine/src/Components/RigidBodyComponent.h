@@ -1,5 +1,4 @@
-#ifndef RIGIDBODYCOMPONENT_H
-#define RIGIDBODYCOMPONENT_H
+#pragma once
 
 #include <glm/glm.hpp>
 
@@ -10,5 +9,3 @@ struct RigidBodyComponent {
 		this->velocity = velocity;
 	}
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef SPRITECOMPONENT_H
-#define SPRITECOMPONENT_H
+#pragma once
 
 #include <string>
 
@@ -19,5 +18,3 @@ struct SpriteComponent {
 
 	}
 };
-
-#endif
