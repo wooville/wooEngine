@@ -14,6 +14,7 @@ private:
 	bool isDebug;
 	SDL_Window* window;
 	SDL_Renderer* renderer;
+	SDL_Rect camera;
 	int millisecsPreviousFrame;
 	
 	std::unique_ptr<Registry> registry;
@@ -33,6 +34,8 @@ public:
 
 	void LoadLevel(int level);
 
-	int windowWidth;
-	int windowHeight;
+	static int windowWidth;
+	static int windowHeight;
+	static int mapWidth;
+	static int mapHeight;
 };

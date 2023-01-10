@@ -98,6 +98,7 @@ void Registry::Update() {
 		RemoveEntityFromSystems(entity);
 		entityComponentSignatures[entity.GetId()].reset();
 
+		Logger::Log("Entity id = " + std::to_string(entity.GetId()) + " was killed.");
 		freeIds.push_back(entity.GetId());
 	}
 	entitiesToBeKilled.clear();
