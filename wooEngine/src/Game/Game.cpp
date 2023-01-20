@@ -22,11 +22,14 @@
 #include "../Systems/ProjectileEmitSystem.h"
 #include "../Systems/ProjectileLifecycleSystem.h"
 #include "../Systems/RenderTextSystem.h"
+#include "../Systems/RenderHealthBarSystem.h"
 #include <SDL.h>
 #include <SDL_image.h>
 #include <glm/glm.hpp>
 #include <iostream>
 #include <memory>
+#include <imgui/imgui.h>
+#include <imgui/imgui_sdl.h>
 #include <fstream>
 
 int Game::windowWidth;
@@ -87,6 +90,10 @@ void Game::Initialize() {
 	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
 	SDL_RenderSetLogicalSize(renderer, windowWidth, windowHeight);
 
+	// initialize imgui context
+	ImGui::CreateContext();
+	ImGuiSDL::Initialize(renderer, windowWidth, windowHeight);
+
 	// initialize camera view
 	camera.x = 0;
 	camera.y = 0;
@@ -138,6 +145,7 @@ void Game::LoadLevel(int level) {
 	registry->AddSystem<ProjectileEmitSystem>();
 	registry->AddSystem<ProjectileLifecycleSystem>();
 	registry->AddSystem<RenderTextSystem>();
+	registry->AddSystem<RenderHealthBarSystem>();
 
 	// populate asset store
 	assetStore->AddTexture(renderer, "tank-image", "./assets/images/tank-panther-right.png");
@@ -145,10 +153,15 @@ void Game::LoadLevel(int level) {
 	assetStore->AddTexture(renderer, "chopper-image", "./assets/images/chopper-spritesheet.png");
 	assetStore->AddTexture(renderer, "radar-image", "./assets/images/radar.png");
 	assetStore->AddTexture(renderer, "bullet-image", "./assets/images/bullet.png");
+	
+	assetStore->AddTexture(renderer, "heart-image", "./assets/NinjaAdventure/HUD/Heart.png");
+
 	// tilemaps
 	assetStore->AddTexture(renderer, "jungle-tilemap", "./assets/tilemaps/jungle.png");
 	// fonts
 	assetStore->AddFont("charriot-font", "./assets/fonts/charriot.ttf", 14);
+	assetStore->AddFont("normal-font", "./assets/NinjaAdventure/HUD/Font/NormalFont.ttf", 14);
+	assetStore->AddFont("normal-font-small", "./assets/NinjaAdventure/HUD/Font/NormalFont.ttf", 8);
 
 	//read map
 	int tileSize = 32;
@@ -214,10 +227,6 @@ void Game::LoadLevel(int level) {
 	radar.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
 	radar.AddComponent<SpriteComponent>("radar-image", 64, 64, 2, true);
 	radar.AddComponent<AnimationComponent>(8, 5, true);
-
-	Entity label = registry->CreateEntity();
-	SDL_Color white = { 255, 255, 255 };
-	label.AddComponent<TextLabelComponent>(glm::vec2(100, 100), "THIS IS A TEXT LABEL!!!", "charriot-font", white);
 }
 
 void Game::Setup() {
@@ -264,14 +273,22 @@ void Game::Render() {
 	// invoke systems that need to render
 	registry->GetSystem<RenderSystem>().Update(renderer, assetStore, camera);
 	registry->GetSystem<RenderTextSystem>().Update(renderer, assetStore, camera);
+	
 	if (isDebug) {
 		registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
+		registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, camera);
+		
+		ImGui::NewFrame();
+		ImGui::ShowDemoWindow();
+		ImGuiSDL::Render(ImGui::GetDrawData());
 	}
 
 	SDL_RenderPresent(renderer);
 }
 
 void Game::Destroy() {
+	ImGuiSDL::Deinitialize();
+	ImGui::DestroyContext();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();

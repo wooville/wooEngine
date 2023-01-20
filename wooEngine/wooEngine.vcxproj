@@ -433,6 +433,7 @@
     <ClInclude Include="src\Systems\CameraMovementSystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\DamageSystem.h" />
+    <ClInclude Include="src\Systems\RenderHealthBarSystem.h" />
     <ClInclude Include="src\Systems\KeyboardControlSystem.h" />
     <ClInclude Include="src\Systems\MovementSystem.h" />
     <ClInclude Include="src\Systems\ProjectileEmitSystem.h" />

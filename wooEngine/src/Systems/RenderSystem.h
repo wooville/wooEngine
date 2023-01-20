@@ -16,8 +16,6 @@ public:
 	
 
 	void Update(SDL_Renderer* renderer, std::unique_ptr<AssetStore>& assetStore, SDL_Rect& camera) {
-		//sort entities by z-index
-
 		//organize into struct that couples transform and sprite components
 		struct RenderableEntity {
 			TransformComponent transformComponent;
