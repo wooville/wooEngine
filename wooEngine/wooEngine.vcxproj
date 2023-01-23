@@ -147,7 +147,9 @@
     <ClCompile Include="libs\imgui\imgui.cpp" />
     <ClCompile Include="libs\imgui\imgui_demo.cpp" />
     <ClCompile Include="libs\imgui\imgui_draw.cpp" />
-    <ClCompile Include="libs\imgui\imgui_sdl.cpp" />
+    <ClCompile Include="libs\imgui\imgui_impl_sdl.cpp" />
+    <ClCompile Include="libs\imgui\imgui_impl_sdlrenderer.cpp" />
+    <ClCompile Include="libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\AssetStore\AssetStore.cpp" />
     <ClCompile Include="src\ECS\ECS.cpp" />
@@ -399,8 +401,9 @@
     <ClInclude Include="libs\glm\vector_relational.hpp" />
     <ClInclude Include="libs\imgui\imconfig.h" />
     <ClInclude Include="libs\imgui\imgui.h" />
+    <ClInclude Include="libs\imgui\imgui_impl_sdl.h" />
+    <ClInclude Include="libs\imgui\imgui_impl_sdlrenderer.h" />
     <ClInclude Include="libs\imgui\imgui_internal.h" />
-    <ClInclude Include="libs\imgui\imgui_sdl.h" />
     <ClInclude Include="libs\imgui\imstb_rectpack.h" />
     <ClInclude Include="libs\imgui\imstb_textedit.h" />
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
@@ -433,6 +436,7 @@
     <ClInclude Include="src\Systems\CameraMovementSystem.h" />
     <ClInclude Include="src\Systems\CollisionSystem.h" />
     <ClInclude Include="src\Systems\DamageSystem.h" />
+    <ClInclude Include="src\Systems\RenderGUISystem.h" />
     <ClInclude Include="src\Systems\RenderHealthBarSystem.h" />
     <ClInclude Include="src\Systems\KeyboardControlSystem.h" />
     <ClInclude Include="src\Systems\MovementSystem.h" />

@@ -23,17 +23,22 @@
 #include "../Systems/ProjectileLifecycleSystem.h"
 #include "../Systems/RenderTextSystem.h"
 #include "../Systems/RenderHealthBarSystem.h"
+#include "../Systems/RenderGUISystem.h"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_render.h>
 #include <glm/glm.hpp>
 #include <iostream>
 #include <memory>
 #include <imgui/imgui.h>
-#include <imgui/imgui_sdl.h>
+#include <imgui/imgui_impl_sdlrenderer.h>
+#include <imgui/imgui_impl_sdl.h>
 #include <fstream>
 
 int Game::windowWidth;
 int Game::windowHeight;
+int Game::logicalWindowWidth;
+int Game::logicalWindowHeight;
 int Game::mapWidth;
 int Game::mapHeight;
 
@@ -64,8 +69,10 @@ void Game::Initialize() {
 	SDL_DisplayMode displayMode;
 	SDL_GetCurrentDisplayMode(0, &displayMode);
 
-	windowWidth = 1600;  // displayMode.w;
-	windowHeight = 900; // displayMode.h;
+	windowWidth = displayMode.w;
+	windowHeight = displayMode.h;
+	logicalWindowWidth = 1600;  // displayMode.w;
+	logicalWindowHeight = 900; // displayMode.h;
 	window = SDL_CreateWindow(NULL,
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
@@ -88,11 +95,18 @@ void Game::Initialize() {
 		return;
 	}
 	SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP);
-	SDL_RenderSetLogicalSize(renderer, windowWidth, windowHeight);
+	SDL_RenderSetLogicalSize(renderer, logicalWindowWidth, logicalWindowHeight);
 
 	// initialize imgui context
 	ImGui::CreateContext();
-	ImGuiSDL::Initialize(renderer, windowWidth, windowHeight);
+	
+	// Setup Dear ImGui style
+	ImGui::StyleColorsDark();
+	//ImGui::StyleColorsLight();
+
+	// Setup Platform/Renderer backends
+	ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
+	ImGui_ImplSDLRenderer_Init(renderer);
 
 	// initialize camera view
 	camera.x = 0;
@@ -116,6 +130,19 @@ void Game::ProcessInput() {
 	SDL_Event sdlEvent;
 
 	while(SDL_PollEvent(&sdlEvent)){
+		ImGui_ImplSDL2_ProcessEvent(&sdlEvent);
+		
+		ImGuiIO& io = ImGui::GetIO();
+
+		int mouseX, mouseY;
+		float logicalMouseX, logicalMouseY;
+		const int buttons = SDL_GetMouseState(&mouseX, &mouseY);
+		SDL_RenderWindowToLogical(renderer, mouseX, mouseY, &logicalMouseX, &logicalMouseY);
+
+		io.MousePos = ImVec2(logicalMouseX, logicalMouseY);
+		io.MouseDown[0] = buttons & SDL_BUTTON(SDL_BUTTON_LEFT);
+		io.MouseDown[1] = buttons & SDL_BUTTON(SDL_BUTTON_RIGHT);
+
 		switch (sdlEvent.type) {
 		case SDL_QUIT :
 			isRunning = false;
@@ -146,6 +173,7 @@ void Game::LoadLevel(int level) {
 	registry->AddSystem<ProjectileLifecycleSystem>();
 	registry->AddSystem<RenderTextSystem>();
 	registry->AddSystem<RenderHealthBarSystem>();
+	registry->AddSystem<RenderGUISystem>();
 
 	// populate asset store
 	assetStore->AddTexture(renderer, "tank-image", "./assets/images/tank-panther-right.png");
@@ -277,17 +305,22 @@ void Game::Render() {
 	if (isDebug) {
 		registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
 		registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, camera);
+		registry->GetSystem<RenderGUISystem>().Update();
 		
-		ImGui::NewFrame();
-		ImGui::ShowDemoWindow();
-		ImGuiSDL::Render(ImGui::GetDrawData());
+		//ImGui_ImplSDLRenderer_NewFrame();
+		//ImGui_ImplSDL2_NewFrame();
+		//ImGui::NewFrame();
+		//ImGui::ShowDemoWindow();
+		//ImGui::Render();
+		//ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
 	}
 
 	SDL_RenderPresent(renderer);
 }
 
 void Game::Destroy() {
-	ImGuiSDL::Deinitialize();
+	ImGui_ImplSDLRenderer_Shutdown();
+	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
