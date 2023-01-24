@@ -111,8 +111,8 @@ void Game::Initialize() {
 	// initialize camera view
 	camera.x = 0;
 	camera.y = 0;
-	camera.w = windowWidth;
-	camera.h = windowHeight;
+	camera.w = logicalWindowWidth;
+	camera.h = logicalWindowHeight;
 
 	isRunning = true;
 }
@@ -178,9 +178,12 @@ void Game::LoadLevel(int level) {
 	// populate asset store
 	assetStore->AddTexture(renderer, "tank-image", "./assets/images/tank-panther-right.png");
 	assetStore->AddTexture(renderer, "truck-image", "./assets/images/truck-ford-right.png");
+	assetStore->AddTexture(renderer, "tree-image", "./assets/images/tree.png");
 	assetStore->AddTexture(renderer, "chopper-image", "./assets/images/chopper-spritesheet.png");
 	assetStore->AddTexture(renderer, "radar-image", "./assets/images/radar.png");
 	assetStore->AddTexture(renderer, "bullet-image", "./assets/images/bullet.png");
+
+	assetStore->AddTexture(renderer, "axolot-image", "./assets/NinjaAdventure/Actor/Monsters/Axolot/SpriteSheet.png");
 	
 	assetStore->AddTexture(renderer, "heart-image", "./assets/NinjaAdventure/HUD/Heart.png");
 
@@ -221,19 +224,15 @@ void Game::LoadLevel(int level) {
 
 	Entity tank = registry->CreateEntity();
 	tank.Group("enemies");
-	Entity truck = registry->CreateEntity();
-	truck.Group("enemies");
-	Entity chopper = registry->CreateEntity();
-	chopper.Tag("player");
-	Entity radar = registry->CreateEntity();
-
-	tank.AddComponent<TransformComponent>(glm::vec2(10.0, 100.0), glm::vec2(1.0, 1.0));
-	tank.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
+	tank.AddComponent<TransformComponent>(glm::vec2(500.0, 500.0), glm::vec2(1.0, 1.0));
+	tank.AddComponent<RigidBodyComponent>(glm::vec2(50.0, 0.0));
 	tank.AddComponent<SpriteComponent>("tank-image", 32, 32, 1);
 	tank.AddComponent<BoxColliderComponent>(32, 32);
-	tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0, 0), 1000, 2000, 10, false);
+	//tank.AddComponent<ProjectileEmitterComponent>(glm::vec2(100.0, 0), 1000, 2000, 10, false);
 	tank.AddComponent<HealthComponent>(100);
 
+	Entity truck = registry->CreateEntity();
+	truck.Group("enemies");
 	truck.AddComponent<TransformComponent>(glm::vec2(500.0, 100.0), glm::vec2(1.0, 1.0));
 	truck.AddComponent<RigidBodyComponent>(glm::vec2(0, 0.0));
 	truck.AddComponent<SpriteComponent>("truck-image", 32, 32, 1);
@@ -241,6 +240,20 @@ void Game::LoadLevel(int level) {
 	truck.AddComponent<ProjectileEmitterComponent>(glm::vec2(0, 100), 1000, 3000, 10, false);
 	truck.AddComponent<HealthComponent>(100);
 
+	Entity treeA = registry->CreateEntity();
+	treeA.Group("obstacles");
+	treeA.AddComponent<TransformComponent>(glm::vec2(600.0, 495.0), glm::vec2(1.0, 1.0));
+	treeA.AddComponent<SpriteComponent>("tree-image", 16, 32, 2);
+	treeA.AddComponent<BoxColliderComponent>(16, 32);
+
+	Entity treeB = registry->CreateEntity();
+	treeB.Group("obstacles");
+	treeB.AddComponent<TransformComponent>(glm::vec2(400.0, 495.0), glm::vec2(1.0, 1.0));
+	treeB.AddComponent<SpriteComponent>("tree-image", 16, 32, 2);
+	treeB.AddComponent<BoxColliderComponent>(16, 32);
+
+	Entity chopper = registry->CreateEntity();
+	chopper.Tag("player");
 	chopper.AddComponent<TransformComponent>(glm::vec2(10.0, 10.0), glm::vec2(1.0, 1.0));
 	chopper.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
 	chopper.AddComponent<SpriteComponent>("chopper-image", 32, 32, 2);
@@ -251,7 +264,8 @@ void Game::LoadLevel(int level) {
 	chopper.AddComponent<ProjectileEmitterComponent>(glm::vec2(350.0, 350.0), 0, 10000, 10, true);
 	chopper.AddComponent<HealthComponent>(100);
 
-	radar.AddComponent<TransformComponent>(glm::vec2(windowWidth - 74, 10.0), glm::vec2(1.0, 1.0));
+	Entity radar = registry->CreateEntity();
+	radar.AddComponent<TransformComponent>(glm::vec2(logicalWindowWidth - 74, 10.0), glm::vec2(1.0, 1.0));
 	radar.AddComponent<RigidBodyComponent>(glm::vec2(0.0, 0.0));
 	radar.AddComponent<SpriteComponent>("radar-image", 64, 64, 2, true);
 	radar.AddComponent<AnimationComponent>(8, 5, true);
@@ -278,6 +292,7 @@ void Game::Update() {
 	eventBus->Reset();
 
 	// subscribe to events for all systems for current frame
+	registry->GetSystem<MovementSystem>().SubscribeToEvents(eventBus);
 	registry->GetSystem<DamageSystem>().SubscribeToEvents(eventBus);
 	registry->GetSystem<KeyboardControlSystem>().SubscribeToEvents(eventBus);
 	registry->GetSystem<ProjectileEmitSystem>().SubscribeToEvents(eventBus);
@@ -305,14 +320,7 @@ void Game::Render() {
 	if (isDebug) {
 		registry->GetSystem<RenderColliderSystem>().Update(renderer, camera);
 		registry->GetSystem<RenderHealthBarSystem>().Update(renderer, assetStore, camera);
-		registry->GetSystem<RenderGUISystem>().Update();
-		
-		//ImGui_ImplSDLRenderer_NewFrame();
-		//ImGui_ImplSDL2_NewFrame();
-		//ImGui::NewFrame();
-		//ImGui::ShowDemoWindow();
-		//ImGui::Render();
-		//ImGui_ImplSDLRenderer_RenderDrawData(ImGui::GetDrawData());
+		registry->GetSystem<RenderGUISystem>().Update(renderer, registry, camera);
 	}
 
 	SDL_RenderPresent(renderer);
