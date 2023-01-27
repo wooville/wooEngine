@@ -1,9 +1,9 @@
 #pragma once
 
 struct HealthComponent {
-	int health;
+	int health_val;
 
-	HealthComponent(int health = 0) {
-		this->health = health;
+	HealthComponent(int health_val = 0) {
+		this->health_val = health_val;
 	}
 };

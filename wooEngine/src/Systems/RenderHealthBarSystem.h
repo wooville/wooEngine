@@ -32,14 +32,14 @@ public:
 			SDL_Rect healthBarRectangle = {
 				static_cast<int>(healthBarPosX),
 				static_cast<int>(healthBarPosY),
-				static_cast<int>(healthBarWidth * (health.health / 100.0)),
+				static_cast<int>(healthBarWidth * (health.health_val / 100.0)),
 				static_cast<int>(healthBarHeight)
 			};
 			SDL_SetRenderDrawColor(renderer, healthBarColor.r, healthBarColor.g, healthBarColor.b, 255);
 			SDL_RenderFillRect(renderer, &healthBarRectangle);
 
 			// render label
-			std::string healthText = std::to_string(health.health);
+			std::string healthText = std::to_string(health.health_val);
 			SDL_Surface* surface = TTF_RenderText_Blended(assetStore->GetFont("normal-font-small"), healthText.c_str(), healthBarColor);
 			SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 			int labelWidth = 0;

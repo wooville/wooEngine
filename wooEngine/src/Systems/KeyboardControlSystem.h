@@ -3,7 +3,7 @@
 #include "../ECS/ECS.h"
 #include "../EventBus/EventBus.h"
 #include "../Events/KeyPressedEvent.h"
-#include "../Components/KeyboardControlledComponent.h"
+#include "../Components/KeyboardControllerComponent.h"
 #include "../Components/SpriteComponent.h"
 #include "../Components/RigidBodyComponent.h"
 #include "SDL.h"
@@ -11,7 +11,7 @@
 class KeyboardControlSystem : public System {
 public:
 	KeyboardControlSystem() {
-		RequireComponent<KeyboardControlledComponent>();
+		RequireComponent<KeyboardControllerComponent>();
 		RequireComponent<SpriteComponent>();
 		RequireComponent<RigidBodyComponent>();
 
@@ -27,7 +27,7 @@ public:
 		//Logger::Log("Key pressed: [" + keyCode + "] " + keySymbol);
 
 		for (auto entity : GetSystemEntities()) {
-			const auto& keyboardcontrol = entity.GetComponent<KeyboardControlledComponent>();
+			const auto& keyboardcontrol = entity.GetComponent<KeyboardControllerComponent>();
 			auto& sprite = entity.GetComponent<SpriteComponent>();
 			auto& rigidbody = entity.GetComponent<RigidBodyComponent>();
 

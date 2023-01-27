@@ -54,6 +54,9 @@
     <ClCompile Include="libs\imgui\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Game\LevelLoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="libs\glm\detail\_features.hpp">
@@ -875,7 +878,7 @@
     <ClInclude Include="src\Systems\KeyboardControlSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Components\KeyboardControlledComponent.h">
+    <ClInclude Include="src\Components\KeyboardControllerComponent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Components\CameraFollowComponent.h">
@@ -915,6 +918,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\Systems\RenderGUISystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\LevelLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Components\ScriptComponent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Systems\ScriptSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -1315,5 +1327,7 @@
     <None Include="libs\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="assets\scripts\myscript.lua" />
+    <None Include="assets\scripts\level1_old.lua" />
   </ItemGroup>
 </Project>

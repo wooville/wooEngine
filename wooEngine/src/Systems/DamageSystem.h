@@ -45,10 +45,10 @@ public:
 		if (!projectileComponent.isFriendly) {
 			auto& health = player.GetComponent<HealthComponent>();
 
-			health.health -= projectileComponent.hitDamage;
-			//Logger::Log("Player received hit, new player health = " + std::to_string(health.health));
+			health.health_val -= projectileComponent.hitDamage;
+			//Logger::Log("Player received hit, new player health = " + std::to_string(health.health_val));
 
-			if (health.health <= 0) {
+			if (health.health_val <= 0) {
 				player.Kill();
 			}
 
@@ -63,10 +63,10 @@ public:
 		if (projectileComponent.isFriendly) {
 			auto& health = enemy.GetComponent<HealthComponent>();
 
-			health.health -= projectileComponent.hitDamage;
-			//Logger::Log("Enemy id = " + std::to_string(enemy.GetId()) +" received hit, new enemy health = " + std::to_string(health.health));
+			health.health_val -= projectileComponent.hitDamage;
+			//Logger::Log("Enemy id = " + std::to_string(enemy.GetId()) +" received hit, new enemy health = " + std::to_string(health.health_val));
 
-			if (health.health <= 0) {
+			if (health.health_val <= 0) {
 				enemy.Kill();
 			}
 

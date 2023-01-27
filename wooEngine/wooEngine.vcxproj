@@ -153,6 +153,7 @@
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="src\AssetStore\AssetStore.cpp" />
     <ClCompile Include="src\ECS\ECS.cpp" />
+    <ClCompile Include="src\Game\LevelLoader.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Game\Game.cpp" />
     <ClCompile Include="src\Logger\Logger.cpp" />
@@ -418,10 +419,11 @@
     <ClInclude Include="src\Components\BoxColliderComponent.h" />
     <ClInclude Include="src\Components\CameraFollowComponent.h" />
     <ClInclude Include="src\Components\HealthComponent.h" />
-    <ClInclude Include="src\Components\KeyboardControlledComponent.h" />
+    <ClInclude Include="src\Components\KeyboardControllerComponent.h" />
     <ClInclude Include="src\Components\ProjectileComponent.h" />
     <ClInclude Include="src\Components\ProjectileEmitterComponent.h" />
     <ClInclude Include="src\Components\RigidBodyComponent.h" />
+    <ClInclude Include="src\Components\ScriptComponent.h" />
     <ClInclude Include="src\Components\SpriteComponent.h" />
     <ClInclude Include="src\Components\TextLabelComponent.h" />
     <ClInclude Include="src\Components\TransformComponent.h" />
@@ -431,6 +433,7 @@
     <ClInclude Include="src\Events\CollisionEvent.h" />
     <ClInclude Include="src\Events\KeyPressedEvent.h" />
     <ClInclude Include="src\Game\Game.h" />
+    <ClInclude Include="src\Game\LevelLoader.h" />
     <ClInclude Include="src\Logger\Logger.h" />
     <ClInclude Include="src\Systems\AnimationSystem.h" />
     <ClInclude Include="src\Systems\CameraMovementSystem.h" />
@@ -445,8 +448,11 @@
     <ClInclude Include="src\Systems\RenderColliderSystem.h" />
     <ClInclude Include="src\Systems\RenderSystem.h" />
     <ClInclude Include="src\Systems\RenderTextSystem.h" />
+    <ClInclude Include="src\Systems\ScriptSystem.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="assets\scripts\level1_old.lua" />
+    <None Include="assets\scripts\myscript.lua" />
     <None Include="libs\glm\detail\func_common.inl" />
     <None Include="libs\glm\detail\func_common_simd.inl" />
     <None Include="libs\glm\detail\func_exponential.inl" />
