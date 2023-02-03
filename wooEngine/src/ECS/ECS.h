@@ -350,8 +350,6 @@ void Registry::RemoveComponent(Entity entity) {
 	std::shared_ptr<Pool<TComponent>> componentPool = std::static_pointer_cast<Pool<TComponent>>(componentPools[componentId]);
 	componentPool->remove(entityId);
 
-	entityComponentSignatures[entityId].set(componentId, false);
-
 	Logger::Log("Component id = " + std::to_string(componentId) + " was removed from entity id = " + std::to_string(entityId));
 }
 

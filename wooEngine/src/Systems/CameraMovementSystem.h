@@ -24,6 +24,7 @@ public:
 				camera.y = transform.position.y - (Game::logicalWindowHeight / 2);
 			}
 
+			// reset camera position if out of bounds
 			camera.x = (camera.x < 0) ? 0 : camera.x;
 			camera.y = (camera.y < 0) ? 0 : camera.y;
 			camera.x = (camera.x > camera.w) ? camera.w : camera.x;

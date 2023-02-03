@@ -24,7 +24,7 @@ public:
 	void onKeyPressed(KeyPressedEvent& event) {
 		for (auto entity : GetSystemEntities()) {
 			//only process input of player
-			if (entity.HasComponent<CameraFollowComponent>()) {
+			if (entity.HasTag("player")) {
 				switch (event.symbol) {
 				case SDLK_SPACE:
 					auto& projectileEmitter = entity.GetComponent<ProjectileEmitterComponent>();
