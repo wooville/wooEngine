@@ -1,5 +1,5 @@
 # wooEngine
-Custom ECS game engine built from scratch using C++, SDL, Lua, following this wonderful course by Gustavo Pezzi:
+Custom ECS game engine built from scratch using C++, SDL, Lua, design based on this wonderful course by Gustavo Pezzi:
 https://pikuma.com/courses/cpp-2d-game-engine-development
 
 ## ECS Implementation
